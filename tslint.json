@@ -1,0 +1,48 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint-react",
+        "tsconfig.paths.json"
+    ],
+    "jsRules": {
+    },
+    "rules": {
+        "member-access": false,
+        "ordered-imports": false,
+        "quotemark": false,
+        "no-console": false,
+        "semicolon": false,
+        "jsx-no-lambda": false
+    },
+    "rulesDirectory": [
+    ],
+    "linterOptions": {
+        "exclude": [
+            "config/**/*.js",
+            "node_modules/**/*.ts"
+       ]
+   },
+   "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+   },
+   "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
+ 
+}

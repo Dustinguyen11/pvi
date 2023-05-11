@@ -1,0 +1,12 @@
+
+:root {
+    --main-bg-color: #003460;
+    --primary-color: #0C2448;
+    --sub-text-color: #65789C;
+    --text-color:#FFFFFF;
+    --light-input-color: #466686;
+    --pop-background-color: linear-gradient(122.33deg, #E2CCD5 2.37%, #AEC1D7 90.29%);
+    --pop-background-radius: 30px;
+    --pop-box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.25);
+   
+}

@@ -1,0 +1,110 @@
+
+.box-login-container {
+    width: 240px;
+    min-height: 100px;
+    position: absolute;
+    left: 50%; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: calc(20% + 140px);
+    transform: translateX(-50%);
+}
+
+
+.box-login {
+    background: var(--pop-background-color);
+    border-radius: var(--pop-background-radius);
+    width: 100%; 
+    position: relative;
+    box-shadow: var(--pop-box-shadow);
+    padding: 40px;
+    padding-top: 70px;
+}
+
+.button-login-container{
+    background: var(--pop-background-color); 
+    border-radius: 0 0 20px 20px;
+    width: 90%;
+    padding: 12px;
+}
+
+.box-login-effect{
+    background: #278BE8;
+    opacity: 0.6;
+    filter: blur(20px);
+    width: 160px;
+    height: 40px;
+    position: absolute;
+    bottom: 30px;
+    right: 40px;
+}
+
+
+
+.input-container {
+    height: 40px;
+    width: 100%;
+    background: var(--sub-text-color);
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.input-container .input-icon {
+    background-color: var(--primary-color);
+    width: 40px;
+    height: 40px;
+}
+.input-container input {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+}
+
+::placeholder { 
+    color: #98ADC6;
+    opacity: 1; 
+  }
+  
+  :-ms-input-placeholder { 
+    color: #98ADC6;
+  }
+  
+  ::-ms-input-placeholder {
+    color: #98ADC6;
+  }
+
+.box-login-avatar-container {
+    width: 100px;
+    height: 100px;
+    background-color: var(--primary-color);
+    position: absolute;
+    z-index: 1;
+    top: -50px;
+    border-radius: 50px;
+    border: 1px solid #20235A;
+
+}
+
+.box-bottom-action {
+    margin-top: 30px;
+    display: flex;
+    
+}
+.flex {
+    flex: 1;
+}
+
+.logo {
+    width: 160px;
+    position: absolute;
+    top: -230px;
+}
+.logo img {
+    width: 100%;
+}
