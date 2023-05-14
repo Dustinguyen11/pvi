@@ -42,6 +42,24 @@ type Props = {
                         id:"2"
                     }],
                 senderId: "system"
+            },
+            {
+                id: uuid.v4(),
+                text:  "tIN NHẮN được trả lời tự động vào có thông tin liên quan đến tệp tài liệu đồng thời cho phép copy",
+                referents: [
+                    {
+                        content: " test 0123 te test 0123 test 0123 test 0st 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 ",
+                        url:"epubcfi(/6/14[xchapter_001]!4/2/24/2[c001p0011]/1:799)",
+                        title: "page 1" 
+                    },
+                    {
+                        content: " test 0123 te test 0123 test 0123 test 0st 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 ",
+                        url:"epubcfi(/6/8!/4/2/30,/1:13,/3:161)",
+                        title: "page 2" 
+                    }
+                ],
+                documents: [ ],
+                senderId: "system"
             }
         ])
     }, [])

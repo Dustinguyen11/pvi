@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import {  toast } from 'react-toastify';
 import { translateCell } from '@app/i18n';
 import { MessageReferent } from '@app/network/model/message.model';
+import { bookJumpTo } from '@app/redux/bookReducer';
 
 export enum MessageType {
     reply,
@@ -54,6 +55,25 @@ const MessageMenu = ({ menu, displayMenuItem, onSelectObject }: PropsMenu) => {
         }
     </ol>
 }
+
+const MessageReferentsItem =  ({ referent }: {referent:MessageReferent }) => {
+    const dispatch = useAppDispatch()
+
+    return <div >
+        <div className="referent-page-text-wraper">
+           <div className='referent-page-text' onClick={()=>{
+                dispatch(bookJumpTo(referent.url))
+           }}>
+           {referent.title}
+           </div>
+        </div>
+        <div className='referent-text'>
+        {
+            referent.content
+        }
+        </div>
+    </div>
+}
 const MessageReferents = ({ referents }: PropsReferent) => {
     const { t } = useTranslation();
     const [isShowTip, setShowTip] = useState(false)
@@ -66,6 +86,11 @@ const MessageReferents = ({ referents }: PropsReferent) => {
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content 
+          collisionBoundary={
+            [
+                document.getElementsByClassName("chatbox-container") [0]
+            ]
+          }
           collisionPadding ={20} 
           className="TooltipContent" 
           sideOffset={5} 
@@ -75,10 +100,12 @@ const MessageReferents = ({ referents }: PropsReferent) => {
           onPointerDownOutside={()=>setShowTip(false)}
           avoidCollisions = {true}
           >
-           <div>
-           Add to library   Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library  Add to library
+            
+                <div className='referent-container'>
+                    {referents.map((r)=><MessageReferentsItem  key={r.title} referent={r}/>)}
+                </div>
             <Tooltip.Arrow className="TooltipArrow" />  
-           </div>
+            
           </Tooltip.Content>
         </Tooltip.Portal>
     </Tooltip.Root>

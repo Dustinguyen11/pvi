@@ -133,8 +133,12 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+ 
 }
-
+.referent-container {
+       overflow: auto;
+    max-height: 140px;;
+}
 .message-referents .message-ref-text:hover {
     color: aquamarine; 
 }
@@ -322,9 +326,56 @@ button {
     height: 40px;
   }
 
+  .TooltipContent {
+    max-width: 50vw; 
+
+  }
+  .referent-text{
+    color: var(--text-color);
+    font-size: 12px;
    
+  }
+
+.referent-page-text-wraper {
+    text-align: right;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.referent-page-text {
+    display: inline-block;
+    font-weight: 600;
+    padding: 2px;
+    font-size: 14px;
+    cursor: pointer;
+}
+  
+@media only screen and (min-width: 1200px) { 
+    .TooltipContent {
+        max-width: 40vw;
+      }
+}
+
 @media only screen and (max-height: 600px) { 
     .chat-input-wraper {
         padding-bottom: 14px;
     }
+ 
+} 
+
+ 
+@media only screen and (max-width: 1201px) { 
+    .TooltipContent {
+        max-width: 300px;
+      }
 }
+
+@media only screen and (max-width: 768px) { 
+    .TooltipContent {
+        max-width: 80vw;
+    }
+}
+
+
+   
