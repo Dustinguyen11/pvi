@@ -1,0 +1,53 @@
+
+.dashboard-content {
+    display: flex;
+    width: 100%;
+}
+
+.dashboard-content > div {
+    flex: 1
+}
+
+.d-book {
+
+}
+
+
+
+@media only screen and (max-width: 768px) {
+ 
+    .dashboard-content{
+        display: block; 
+    }
+    .dashboard-content .d-book {
+      
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        width: 100%;
+
+        transition: -webkit-transform .5s ease;
+        transition: transform .5s ease;
+        box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.3)  ;
+
+    }
+    .dashboard-content  .chatbox-container {
+        height: 100%;
+    }
+
+    .d-book.show { 
+        -webkit-transform: translateX(0px);
+        -ms-transform: translateX(0px);
+        transform: translateX(0px)
+    }
+
+    .d-book.hide { 
+        -webkit-transform: translateX(110%);
+        -ms-transform: translateX(110%);
+        transform: translateX(110%);
+    }
+    
+}
+
+

@@ -1,0 +1,25 @@
+.footer-item-container {
+    display: flex;
+    color: white;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    cursor: pointer;
+
+}
+.footer-item-container label{
+    flex: 1;
+    padding-left: 10px;
+    cursor: pointer;
+}
+.footer-item-container:hover {
+    color: aquamarine;
+}
+
+.footer-item-container:hover svg {
+    color : aquamarine;
+}
+
+
+

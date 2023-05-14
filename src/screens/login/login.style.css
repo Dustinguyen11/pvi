@@ -27,17 +27,24 @@
     border-radius: 0 0 20px 20px;
     width: 90%;
     padding: 12px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+}
+
+.button-login-container:hover {
+    color: aquamarine;
 }
 
 .box-login-effect{
     background: #278BE8;
     opacity: 0.6;
-    filter: blur(20px);
-    width: 160px;
+    filter: blur(16px);
+    width: 140px;
     height: 40px;
     position: absolute;
     bottom: 30px;
-    right: 40px;
+    right: 10px;
 }
 
 
@@ -82,13 +89,19 @@
 .box-login-avatar-container {
     width: 100px;
     height: 100px;
-    background-color: var(--primary-color);
+    background-color: var(--main-bg-color);
     position: absolute;
     z-index: 1;
     top: -50px;
     border-radius: 50px;
     border: 1px solid #20235A;
-
+    overflow: hidden;
+    display: flex;
+}
+.box-login-avatar-container img {
+    width: 80%;
+   margin: auto;
+   align-items: center;
 }
 
 .box-bottom-action {
@@ -108,3 +121,109 @@
 .logo img {
     width: 100%;
 }
+
+a {
+    text-decoration: none;
+    color: var(--subtext-color);
+}
+
+.checkbox-container {
+    display: block;
+    position: relative;
+    padding-left: 18px;
+    cursor: pointer; 
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+   
+  .checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+   
+  .checkmark {
+    position: absolute;
+    top: 3px;
+    left: 0;
+    height: 16px;
+    width: 16px;
+    background-color: var(--main-bg-color);
+  }
+   
+  .checkbox-container:hover input ~ .checkmark {
+    background-color: var(--primary-color);
+  }
+   
+  .checkbox-container input:checked ~ .checkmark {
+    background-color: var(--primary-color);
+  }
+   
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+   
+  .checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+  }
+   
+  .checkbox-container .checkmark:after {
+    left: 4px;
+    top: 2px;
+    width: 5px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+
+  @media only screen and (max-width: 280px) {
+ 
+    .box-login-container {
+        width: 100%;
+        left: 0px;
+        transform: initial;
+    }
+    .button-login-container{
+        border-radius: 0;
+        width: 100%;
+        padding: 0px; 
+        padding-top: 14px;
+        padding-bottom: 14px;
+
+    }
+
+    .box-login-container .box-login {
+        width: 100%;
+        border-radius: 0px;
+        padding: 0px;
+        padding-top: 80px;
+        padding-bottom: 20px
+    }
+
+    .box-login-container .input-container {
+        margin: 20px;
+        width: initial;
+    }
+    .box-bottom-action { 
+        margin: 20px;
+    }
+  }
+
+  @media only screen and (max-height: 420px) {
+    .logo {
+        width: 140px;
+        position: absolute;
+        top: -200px;
+        
+    }
+  }

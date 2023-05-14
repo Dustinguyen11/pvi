@@ -4,10 +4,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 type initialStateType = {
-    id: String;
+    id: string;
  };
  const initialState: initialStateType = {
-    id:""
+    id:"me"
 };
 
 
@@ -15,7 +15,7 @@ export const authen = createSlice({
     name: 'authen',
     initialState,
     reducers: {
-      changeText: (state, action: PayloadAction<String>) => {
+      changeText: (state, action: PayloadAction<string>) => {
         state.id = action.payload
       },
      

@@ -1,0 +1,49 @@
+.layout-container .layout-left .petro-logo img {
+    width: 100%;
+}
+
+.layout-container .layout-left .petro-logo {
+    padding: 40px;
+}
+
+.menu-container .menu-title {
+    color: white;
+    padding: 0px 20px;
+    text-decoration: underline;
+}
+
+.history-chat-list {
+    padding: 20px;
+    flex: 1
+}
+
+.history-item-container {
+    border-radius: 6px;
+    padding: 4px;
+    border:  2px solid white;
+    color: white;
+    display: flex;
+    cursor: pointer;
+    
+}
+
+.history-item-container:hover {
+    color: aquamarine;
+    border-color: aquamarine;
+}
+.history-item-container label {
+    flex: 1;
+    cursor: pointer;
+    user-select: none;
+}
+
+
+.left-content-wraper {
+    display: flex;
+    flex-direction: column;
+    flex: 1
+}
+
+.left-content-footer {
+    padding-bottom: 40px;
+}

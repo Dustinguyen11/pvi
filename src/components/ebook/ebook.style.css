@@ -1,0 +1,55 @@
+ 
+ .epubg-container {
+    background-color: var(--primary-color);
+   
+    position: relative;
+    display: flex;
+    flex-direction: column;
+ }
+
+ .epubg-content {
+    background-color: white;
+    margin: 20px;
+    position: relative;
+    overflow: auto;
+    flex: 1; 
+ }
+
+ .epubg-container .title {
+    color: white;
+    font-size: 16;
+    text-align: center;
+    padding-top: 10px;
+ }
+
+ 
+ .epubg-container {
+    height: 100%;
+}
+.btn-book {
+    display: none;
+}
+
+@media only screen and (max-width: 768px) {
+   
+    .btn-book {
+        display: block;
+    }
+    .epubg-container .epubg-content {
+        padding: 0px;
+        margin: 0px;
+        margin-top: 10px;
+    }
+}
+@media only screen and (max-width: 1200px) {
+   
+   
+.epubg-container .epubg-content {
+    padding: 0px;
+    margin: 0px;
+    margin-top: 10px;
+}
+
+}
+
+

@@ -4,23 +4,24 @@ import React from 'react';
 import "./login.style.css"
 import { useMsal } from '@azure/msal-react';
 import DefaultLayout from '@app/layouts/default.layout';
+import { useTranslation } from 'react-i18next';
 
 
 export default () => {
     const { instance } = useMsal();
-
+    const { t } = useTranslation();
     const doLogin = () => {
         instance.loginRedirect();
     }
     return <DefaultLayout>
-        <div onClick={() => doLogin()}>
+        <div >
             <div className="box-login-container">
                 <div className="logo"> <img src={require("@app/assets/logo.png")} /></div>
                 <div className='box-login-avatar-container'>
-
+                    <img src={require("@app/assets/ic_user_big.png")}/>
                 </div>
                 <div className='box-login-effect'>
-
+    
                 </div>
                 <div className='box-login'>
                     <div className="input-container">
@@ -36,20 +37,21 @@ export default () => {
 
 
                     <div className="box-bottom-action">
-                        <div>
-                            Remember
-                        </div>
+                    <label className="checkbox-container">{t("remember")}
+                        <input type="checkbox" />
+                        <span className="checkmark"></span>
+                    </label>
                         <div className='flex'>
                              
                         </div>
-                        <div>
-                        Forgot password?
-                        </div>
+                        <a href='#'>
+                        {t("forgotPassword")}
+                        </a>
                     </div>
                 </div>
 
                 <div className='button-login-container'>
-                    23123
+                {t("btnLogin")}
                 </div>
             </div>
 
