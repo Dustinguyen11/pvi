@@ -58,12 +58,12 @@ const MessageMenu = ({ menu, displayMenuItem, onSelectObject }: PropsMenu) => {
     </ol>
 }
 
-const MessageReferentsItem =  ({ referent, onClickPage }: {referent:MessageReferent, onClickPage: VoidFunction }) => {
+const MessageReferentsItem =  ({ referent, onClickPage }: {referent:MessageReferent, onClickPage: (referent:MessageReferent)=>void }) => {
     
     return <div >
         <div className="referent-page-text-wraper">
            <div className='referent-page-text' onClick={()=>{ 
-                onClickPage()
+                onClickPage(referent)
            }}>
            {referent.title}
            </div>
@@ -106,9 +106,9 @@ const MessageReferents = ({ referents }: PropsReferent) => {
           >
             
                 <div className='referent-container'>
-                    {referents.map((r)=><MessageReferentsItem  key={r.title} referent={r} onClickPage={()=>{
+                    {referents.map((r)=><MessageReferentsItem  key={r.title} referent={r} onClickPage={( ref)=>{
                         setShowTip(false)
-                        dispatch(bookJumpTo(r.url))
+                        dispatch(bookJumpTo(ref.url))
                     }} />)}
                 </div>
             <Tooltip.Arrow className="TooltipArrow" />  

@@ -41,6 +41,7 @@ svg {
     position: fixed;
     overflow: hidden;
     height: 100%;
+    background-color: var(--main-bg-color);
   }
   .layout-content{
     -webkit-overflow-scrolling: touch;

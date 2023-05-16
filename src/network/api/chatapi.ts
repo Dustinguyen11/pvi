@@ -28,7 +28,7 @@ export class ChatAI {
     }
 
     get url(): string {
-        return this.base + this.path + new URLSearchParams(this._query)
+        return this.base + this.path + "?"+ new URLSearchParams(this._query)
     }
 
     get body(): string | null {
