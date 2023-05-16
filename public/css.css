@@ -46,4 +46,6 @@ svg {
     -webkit-overflow-scrolling: touch;
 
   }
- 
+  .layout-container {
+    background-color: var(--main-bg-color);
+}

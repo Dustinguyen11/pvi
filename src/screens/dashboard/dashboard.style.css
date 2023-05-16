@@ -2,10 +2,12 @@
 .dashboard-content {
     display: flex;
     width: 100%;
+    
+   
 }
 
 .dashboard-content > div {
-    flex: 1
+    flex: 1;
 }
 
 .d-book {

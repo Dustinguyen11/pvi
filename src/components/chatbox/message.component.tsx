@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch } from "@app/hooks";
 import * as Tooltip from '@radix-ui/react-tooltip';
 
@@ -23,7 +23,8 @@ type Props = {
     menu: any[] | null | undefined,
     showCoppy: boolean,
     onSelectObject: ((object: any) => void) | null | undefined
-    displayMenuItem: ((object: any) => string)
+    displayMenuItem: ((object: any) => string),
+    custom: FunctionComponent | null | undefined
 }
 
 type PropsMenu = {
@@ -45,7 +46,8 @@ const defaultProps: Props = {
     onSelectObject: undefined,
     displayMenuItem: (object: any): string => {
         return object;
-    }
+    },
+    custom: undefined
 }
 
 const MessageMenu = ({ menu, displayMenuItem, onSelectObject }: PropsMenu) => {
@@ -56,13 +58,12 @@ const MessageMenu = ({ menu, displayMenuItem, onSelectObject }: PropsMenu) => {
     </ol>
 }
 
-const MessageReferentsItem =  ({ referent }: {referent:MessageReferent }) => {
-    const dispatch = useAppDispatch()
-
+const MessageReferentsItem =  ({ referent, onClickPage }: {referent:MessageReferent, onClickPage: VoidFunction }) => {
+    
     return <div >
         <div className="referent-page-text-wraper">
-           <div className='referent-page-text' onClick={()=>{
-                dispatch(bookJumpTo(referent.url))
+           <div className='referent-page-text' onClick={()=>{ 
+                onClickPage()
            }}>
            {referent.title}
            </div>
@@ -77,6 +78,9 @@ const MessageReferentsItem =  ({ referent }: {referent:MessageReferent }) => {
 const MessageReferents = ({ referents }: PropsReferent) => {
     const { t } = useTranslation();
     const [isShowTip, setShowTip] = useState(false)
+    const dispatch = useAppDispatch()
+
+
     return <div className='message-referents'>
      <Tooltip.Root open= {isShowTip}>
         <Tooltip.Trigger asChild> 
@@ -102,7 +106,10 @@ const MessageReferents = ({ referents }: PropsReferent) => {
           >
             
                 <div className='referent-container'>
-                    {referents.map((r)=><MessageReferentsItem  key={r.title} referent={r}/>)}
+                    {referents.map((r)=><MessageReferentsItem  key={r.title} referent={r} onClickPage={()=>{
+                        setShowTip(false)
+                        dispatch(bookJumpTo(r.url))
+                    }} />)}
                 </div>
             <Tooltip.Arrow className="TooltipArrow" />  
             
@@ -111,7 +118,7 @@ const MessageReferents = ({ referents }: PropsReferent) => {
     </Tooltip.Root>
     </div>
 }
-const Message = ({ type, message, referents, menu,showCoppy , onSelectObject, displayMenuItem }: Props) => {
+const Message = ({ type, message, referents, menu,showCoppy , onSelectObject, displayMenuItem, custom }: Props) => {
 
 
     const copyText = useCallback(()=>{ 
@@ -128,21 +135,25 @@ const Message = ({ type, message, referents, menu,showCoppy , onSelectObject, di
             });
     },  [message]);
 
-
-    return <div className={'message-container ' + ((type == MessageType.send) ? "send" : "reply")}>
-        <div className="message-wraper speech ">
-            <div className='message-content'>
+    const displayMessage = () => {
+        return   <div className='message-content'>
                 {message}
                 {
                     menu != null ? <MessageMenu onSelectObject={onSelectObject} menu={menu} displayMenuItem={displayMenuItem} /> : null
                 }
+                
                 {
                 showCoppy ? <div className='message-copy' onClick={copyText}>
                     <SVGIcon name='copy'/> 
                 </div> : null
-                }
-                
+                } 
             </div>
+    }
+    return <div className={'message-container ' + ((type == MessageType.send) ? "send" : "reply")}>
+        <div className="message-wraper speech ">
+
+           
+             {  (custom != null) ? <div className='message-content' >{custom({})}</div> : displayMessage() }
             {
                 (referents.length > 0) ? <MessageReferents referents={referents} /> : null
             }

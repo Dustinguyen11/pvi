@@ -4,10 +4,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 type initialStateType = {
-    id: string;
+    id: string
+    userEmail: string
+    instanceId: string
  };
  const initialState: initialStateType = {
-    id:"me"
+    id:"me",
+    userEmail: "tuanna712@gmail.com",
+    instanceId: "da410606-6fcc-45ad-acbc-d3d6f26e93e7"
 };
 
 

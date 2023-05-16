@@ -24,6 +24,7 @@ export const book = createSlice({
         if (state.redentionBook == null) {
             return
         }
+        state.showBook = true
         state.redentionBook.display(action.payload)
       },
       setRedentionBook :  (state, action: PayloadAction<any>)=> {

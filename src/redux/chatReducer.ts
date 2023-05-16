@@ -2,18 +2,23 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import { v4 as uuidv4 } from 'uuid';
 import { ChatSession, ChatSessionStatus, UpdateChatRequest } from '@app/types';
+import { MessageModel } from '@app/network/model/message.model';
 
 
 type initialStateType = {
     id: string;
     sessions: ChatSession[];
-    currentSession: ChatSession | null | undefined
+    currentSession: ChatSession | null | undefined,
+    messages: MessageModel[],
+    isSending: boolean
 };
  
  const initialState: initialStateType = {
     id:"",
     sessions: Array<ChatSession>(),
-    currentSession: null
+    currentSession: null,
+    messages: Array<MessageModel>(),
+    isSending: false,
 };
 
 
@@ -21,6 +26,21 @@ export const chat = createSlice({
     name: 'chat',
     initialState,
     reducers: {
+      cleanMessages:(state, action: PayloadAction<undefined>) => {
+        state.messages = []
+      },
+      postAIMessage:(state, action: PayloadAction<MessageModel>) => {
+        let messages = [...state.messages]
+        messages.push(action.payload) 
+        state.isSending = true
+        state.messages = messages
+      }, 
+      revcAIMessage:(state, action: PayloadAction<MessageModel>) => {
+        let messages = [...state.messages]
+        messages.push(action.payload) 
+        state.isSending = false
+        state.messages = messages
+      },
       newChat: (state, action: PayloadAction<string>) => {
         let id = uuidv4()
         let name = action.payload
@@ -70,6 +90,6 @@ export const chat = createSlice({
      
     },
   });
-export const { newChat , updateChat} = chat.actions;
+export const { newChat , updateChat, postAIMessage, revcAIMessage, cleanMessages} = chat.actions;
 export default chat.reducer;
 

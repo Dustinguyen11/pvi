@@ -10,77 +10,75 @@ import {  toast } from 'react-toastify';
 import { useRef } from 'react';
 import { useState } from 'react';
 import { useCallback } from 'react';
-import { MessageModel, MessageDocuments } from '@app/network/model/message.model';
+import { MessageModel, MessageDocuments, MessageReferent } from '@app/network/model/message.model';
 import * as uuid from 'uuid'
 import { useTranslation } from 'react-i18next';
+import { cleanMessages, postAIMessage, revcAIMessage } from '@app/redux/chatReducer';
+import { AskDocument } from '@app/network/api/chatai.service';
+ 
 type Props = { 
 }
 
 
  const ChatBox = ( )=> { 
+    const dispatch = useAppDispatch()
     const userid = useAppSelector((state)=>state.authen.id)
+    const userEmail = useAppSelector((state)=>state.authen.userEmail)
+    const instanceId = useAppSelector((state)=>state.authen.instanceId)
+    const isSending = useAppSelector((state)=>state.chat.isSending)
+
     const refInputBox = useRef<HTMLDivElement>(null);
     const [textChat, setTextChat] = useState("")
-    const [messages, setMessages] = useState<MessageModel[]>([])
+    const messages = useAppSelector((state)=>state.chat.messages)
     const { t } = useTranslation();
 
     useEffect(()=> {
-        setMessages([
-            {
-                id: uuid.v4(),
-                text:  "Danh mục sách hỏi đáp:",
-                referents: [],
-                documents: [
-                    {
-                        title: "Quyển số 1",
-                        url: "https://react-reader.metabits.no/files/alice.epub",
-                        id:"1"
-                    },
-                    {
-                        title: "Quyển số 2",
-                        url: "https://react-reader.metabits.no/files/alice.epub",
-                        id:"2"
-                    }],
-                senderId: "system"
-            },
-            {
-                id: uuid.v4(),
-                text:  "tIN NHẮN được trả lời tự động vào có thông tin liên quan đến tệp tài liệu đồng thời cho phép copy",
-                referents: [
-                    {
-                        content: " test 0123 te test 0123 test 0123 test 0st 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 ",
-                        url:"epubcfi(/6/14[xchapter_001]!4/2/24/2[c001p0011]/1:799)",
-                        title: "page 1" 
-                    },
-                    {
-                        content: " test 0123 te test 0123 test 0123 test 0st 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 ",
-                        url:"epubcfi(/6/8!/4/2/30,/1:13,/3:161)",
-                        title: "page 2" 
-                    }
-                ],
-                documents: [ ],
-                senderId: "system"
-            }
-        ])
+        dispatch(cleanMessages())
+        dispatch(revcAIMessage( {
+            id: uuid.v4(),
+            text:  "Danh mục sách hỏi đáp:",
+            referents: [],
+            documents: [
+                {
+                    title: "Quyển số 1",
+                    url: "https://react-reader.metabits.no/files/alice.epub",
+                    id:"1"
+                },
+                {
+                    title: "Quyển số 2",
+                    url: "https://react-reader.metabits.no/files/alice.epub",
+                    id:"2"
+                }],
+            senderId: "system"
+        } ))  
+        dispatch(revcAIMessage(    {
+            id: uuid.v4(),
+            text:  "tIN NHẮN được trả lời tự động vào có thông tin liên quan đến tệp tài liệu đồng thời cho phép copy",
+            referents: [
+                {
+                    content: " test 0123 te test 0123 test 0123 test 0st 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 ",
+                    url:"epubcfi(/6/14[xchapter_001]!4/2/24/2[c001p0011]/1:799)",
+                    title: "#Page 1" 
+                },
+                {
+                    content: " test 0123 te test 0123 test 0123 test 0st 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 test 0123 ",
+                    url:"epubcfi(/6/8!/4/2/30,/1:13,/3:161)",
+                    title: "#Page 2" 
+                }
+            ],
+            documents: [ ],
+            senderId: "system"
+        }
+        ))
     }, [])
 
     const sendMessage = (message: string) => {
-        let promise = new Promise((r,j) => {
-            setTimeout(()=>{
-                r(message) 
-            }, 2000)
-        }) 
-        toast.promise(promise,{
-            pending: 'Sending', 
-        }, {
-            theme: "dark",
-            autoClose: 3000,
-        })
-      
+        if (isSending) {
+            return;
+        }
+        
         updateText("")
-
-        let newmesasge = [...messages];
-
+ 
         var fakeMesasge: MessageModel = {
             id: uuid.v4(),
             text: message,
@@ -88,11 +86,42 @@ type Props = {
             documents: [ ],
             senderId: userid
         } 
-        newmesasge.push(fakeMesasge)
-        setMessages( newmesasge )
+        dispatch(postAIMessage( fakeMesasge ))
+
+        AskDocument({
+            userEmail: userEmail,
+            instanceId: instanceId,
+            query: message
+        }).then((response)=> {
+            let aiMessage: MessageModel = {
+                id: uuid.v4(),
+                text: response.response,
+                referents: response.references?.map((m)=> {
+                  var  referent: MessageReferent = {
+                        title: "#Page " + m.doc_metadata["page"],
+                        url: m.doc_metadata["source"],
+                        content: m.source_text
+                  }
+
+                    return referent
+                }) || [],
+                documents: [ ],
+                senderId: "ai"
+            } 
+            dispatch(revcAIMessage( aiMessage ))  
+        }).catch((error)=> {
+            dispatch(revcAIMessage( {
+                id: uuid.v4(),
+                text: error +"",
+                referents: [],
+                documents: [ ],
+                senderId: "ai"
+            }  ))  
+        })
     }
 
     const onSubmit = () => {
+        
         if (textChat.trim() == "") {
             return
         }
@@ -171,8 +200,7 @@ type Props = {
              onSelectObject={
                 (object)=>{
                     if (object as MessageDocuments)
-                    {
-                            console.log(object)
+                    { 
                             sendMessage(object.title)
                     }  
                 }
@@ -188,7 +216,11 @@ type Props = {
              
              />)
          }
-
+          {
+          isSending ? <Message custom={(props)=>{
+            return <div data-uk-spinner="ratio: 0.6"/>
+          }}/> : null
+        }
             </div>
         </div>
         <div className='chat-input-wraper'>

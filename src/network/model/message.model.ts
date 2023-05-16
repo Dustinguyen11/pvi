@@ -19,3 +19,13 @@ export type MessageModel = {
     documents: MessageDocuments[] | null | undefined
     senderId: string
 }
+export type MessageReferentDTOModel = {
+    source_text: string
+    similarity: number
+    doc_metadata: any
+}
+export type MessageDTOModel = {
+    references :MessageReferentDTOModel[] | null | undefined
+    response: string
+    response_time: string
+}
