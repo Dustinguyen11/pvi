@@ -1,0 +1,15 @@
+.index-book-title {
+    color: white;
+    font-size: 20px;
+    padding: 10px;
+    text-align: center;
+}
+.toc-container {
+    padding: 10px;
+}
+
+.toc-item-container {
+    padding: 4px;
+    cursor: pointer;
+    color: white;
+}

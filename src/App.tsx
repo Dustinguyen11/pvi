@@ -12,11 +12,17 @@ import { MsalProvider,  } from '@azure/msal-react';
 import { pca } from '@app/azure/configs';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { ToastContainer } from 'react-toastify';
+import { persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
 
 import RouteGuard from './guards/auth.guard';
 import DashboardScreen from './screens/dashboard/dashboard.screen';
+import IndexScreen from './screens/index/index.screen';
+import SearchScreen from './screens/search/search.screen';
+
 import i18n from './i18n'; 
 import 'react-toastify/dist/ReactToastify.css';
+let persistor = persistStore(store)
 
 function App() {
   return (
@@ -24,16 +30,20 @@ function App() {
         <I18nextProvider i18n={ i18n }>
         <Tooltip.Provider >
     <Provider store={store} > 
+    <PersistGate persistor={persistor}>
        <Router>
        <Routes> 
           <Route path="/" element={ <RouteGuard/>} > 
-              <Route  path='/' element={<LoginScreen/>}/>   
+              <Route  path='/' element={<DashboardScreen/>}/>   
+              <Route  path='/index' element={<IndexScreen/>}/>   
+              <Route  path='/search' element={<SearchScreen/>}/>   
           </Route> 
           <Route path="/dash" element={ <DashboardScreen/>} />
           <Route path="/login" element={ <LoginScreen/>} />
         </Routes>
     </Router>
     <ToastContainer/>
+    </PersistGate>
     </Provider>
      </Tooltip.Provider>
   

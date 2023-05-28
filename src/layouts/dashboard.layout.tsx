@@ -48,6 +48,7 @@ const DashboardLayout: React.FunctionComponent<Props> = (props:Props) => {
         <div className ="layout-content">
         
         <Tooltip.Provider>
+      
         {props.children}
         </Tooltip.Provider>
         </div>

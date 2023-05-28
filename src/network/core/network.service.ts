@@ -9,3 +9,4 @@ export default (object: ChatAI) : Promise<Response>=>  {
         headers: headers
     })
 }
+

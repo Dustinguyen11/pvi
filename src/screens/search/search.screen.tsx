@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import "./dashboard.style.css"
+import "../dashboard/dashboard.style.css"
 import { useMsal } from '@azure/msal-react';
 import DefaultLayout from '@app/layouts/default.layout';
 import DashboardtLayout from '@app/layouts/dashboard.layout';
@@ -12,12 +12,19 @@ import EbookComponent from '@app/components/ebook/ebook.component';
 import { Route, Routes } from 'react-router-dom';
 
 
-const Dashboard = () => {
+const Search = () => {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const isShowBook = useAppSelector((state)=>state.book.showBook)
     return  <div className='dashboard-content'>
-    <ChatBox/>
+     <div>
+        <div>
+        Traditional Search
+        </div>
+        <div>
+            <input/>
+        </div>
+     </div>
      <div className={isShowBook ? "d-book show" : "d-book hide"}>
      <EbookComponent/>
      </div>
@@ -26,7 +33,7 @@ const Dashboard = () => {
 export default () => {  
     return <DashboardtLayout>
         
-        <Dashboard/>
+        <Search/>
 
     </DashboardtLayout>
 }

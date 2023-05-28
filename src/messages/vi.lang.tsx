@@ -15,5 +15,6 @@ export default {
     copySuccess: "Copy text thành công",
     referents: "liên quan",
     referent: "liên quan",    
-    writeAQuestion: "Nhập một câu hỏi" 
+    writeAQuestion: "Nhập một câu hỏi" ,
+    btnOtherAccount: "THÊM TÀI KHOẢN"
 }

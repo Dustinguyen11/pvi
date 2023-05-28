@@ -7,11 +7,12 @@ import SVGIcon from '../common/svgicon.component';
 
 type Props = {
     title: string, 
-    icon: string
+    icon: string,
+    onClick: VoidFunction
 }
 
- const FooterActionItem = ({title, icon}: Props)=> { 
-    return <div className='footer-item-container'>  
+ const FooterActionItem = ({title, icon, onClick}: Props)=> { 
+    return <div className='footer-item-container' onClick={()=>onClick()}>  
         <SVGIcon name={icon}></SVGIcon>
         <label>{title}</label>
     </div>

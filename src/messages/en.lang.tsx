@@ -14,5 +14,6 @@ export default {
     copySuccess: "Copy text success",
     referents: "referents",
     referent: "referent",
-    writeAQuestion: "Write a question"
+    writeAQuestion: "Write a question",
+    btnOtherAccount: "ADD ACCOUNT"
 }
