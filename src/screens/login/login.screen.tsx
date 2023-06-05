@@ -18,7 +18,7 @@ export default () => {
     const { t } = useTranslation();
     const [isLoading, setLoading] = useState(false)
     const [textAccount, setTextAccount] = useState("")
-     const navigate = useNavigate();
+    const navigate = useNavigate();
     const dispatch = useAppDispatch()
     const userAccessToken = useAppSelector((state) => state.authen.accessToken)
     var request = {
@@ -40,6 +40,7 @@ export default () => {
         if (isLoading) {
             return
         }
+        localStorage.setItem("login", "true");
         if (doLoginMobile) {
             doLoginMobile()
             return
@@ -80,8 +81,8 @@ export default () => {
     }
 
     const doLoginAccount = (account: AccountInfo) => {
-          
-      
+
+        localStorage.removeItem("login")
         const didGetAccessToken = (account: AccountInfo, accessToken: string, idToken: string) => {
             dispatch(updateLogin(
                 {
@@ -91,7 +92,7 @@ export default () => {
                 }
             ))
             instance.setActiveAccount(account)
-            global.lastActiveAccount =   account.username
+            global.lastActiveAccount = account.username
             setLoading(false)
             navigate("/")
         }
@@ -121,21 +122,29 @@ export default () => {
             });
 
     }
-    
+
     useEffect(() => {
-        if (accounts.length  <= 0) {
+        if (accounts.length <= 0) {
             return
         }
-    const currentAccount: AccountInfo | null | undefined = instance.getActiveAccount(); 
-      if (!currentAccount) {
-        return
-      }
-    if (accounts[0].username ==  global.lastActiveAccount ) {
-        return
-      }
 
-      doLoginAccount(accounts[0])
-    }, [accounts ])
+        let lastLoginValue = localStorage.getItem("login")
+
+        const currentAccount: AccountInfo | null | undefined = instance.getActiveAccount();
+        if (!currentAccount && lastLoginValue != "true") {
+            return
+        }
+        
+        if (accounts[0].username == global.lastActiveAccount) {
+            return
+        }
+
+        doLoginAccount(currentAccount || accounts[0])
+    }, [accounts])
+
+    const removeAccount = (account: AccountInfo) => {
+        instance.logout()
+    }
     return <DefaultLayout>
         <div >
             <div className="box-login-container">
@@ -147,31 +156,40 @@ export default () => {
 
                 </div>
                 <div className='box-login'>
-                 {
-                    (accounts.length > 0) ?
-                    <>
-                        {accounts.map((account)=> 
-                        <div 
-                        onClick={()=> {
-                            doLoginAccount(account)
-                        }}
-                        key={account.username}
-                        className='account'>
-                            <div className='account-name'>{account.name}</div>
-                            <div  className='account-email' >{account.username}</div> 
-                        </div>
-                        )}
-                    </>
-                    : 
-                    <>
-                      <div className="input-container">
-                        <div className='input-icon'>
-                        </div>
-                        <input placeholder='Account' value={textAccount} onChange={(e)=>setTextAccount(e.target.value)}></input>
-                    </div>
-                    </>
-                 }
-                { /* 
+                    {
+                        (accounts.length > 0) ?
+                            <>
+                                {accounts.map((account) =>
+                                    <div
+
+                                        key={account.username}
+                                        className='account'>
+                                        <div className='account-wrap'
+                                            onClick={() => {
+                                                doLoginAccount(account)
+                                            }}
+                                        >
+                                            <div className='account-name'>{account.name}</div>
+                                            <div className='account-email' >{account.username}</div>
+                                        </div>
+                                        <div className='account-remove' onClick={() => {
+                                            removeAccount(account)
+                                        }}>
+                                            X
+                                        </div>
+                                    </div>
+                                )}
+                            </>
+                            :
+                            <>
+                                <div className="input-container">
+                                    <div className='input-icon'>
+                                    </div>
+                                    <input placeholder='Account' value={textAccount} onChange={(e) => setTextAccount(e.target.value)}></input>
+                                </div>
+                            </>
+                    }
+                    { /* 
                     <div className="input-container">
                         <div className='input-icon'>
                         </div>
@@ -186,33 +204,33 @@ export default () => {
                     </div>
 
                     */
-                 }
+                    }
 
-                  {
-                    /*
-                      <div className="box-bottom-action">
-                        <label className="checkbox-container">{t("remember")}
-                            <input type="checkbox" />
-                            <span className="checkmark"></span>
-                        </label>
-                        <div className='flex'>
-
+                    {
+                        /*
+                          <div className="box-bottom-action">
+                            <label className="checkbox-container">{t("remember")}
+                                <input type="checkbox" />
+                                <span className="checkmark"></span>
+                            </label>
+                            <div className='flex'>
+    
+                            </div>
+                            <a href='#'>
+                                {t("forgotPassword")}
+                            </a>
                         </div>
-                        <a href='#'>
-                            {t("forgotPassword")}
-                        </a>
-                    </div>
-                    */
-                  }
+                        */
+                    }
                 </div>
                 {
-                     (accounts.length > 0) ? null : 
-                     <>  <div className='button-login-container' onClick={() => doLogin()}>
-                     {t("btnLogin")}
-                 </div>
-                 </> 
+                    (accounts.length > 0) ? null :
+                        <>  <div className='button-login-container' onClick={() => doLogin()}>
+                            {t("btnLogin")}
+                        </div>
+                        </>
                 }
-               
+
             </div>
 
         </div>

@@ -13,3 +13,14 @@
     cursor: pointer;
     color: white;
 }
+
+.index-box-list {
+    color: white;
+}
+.index-box-list li {
+    cursor: pointer;
+}
+
+.index-box-list li:hover {
+    color: aquamarine;
+}

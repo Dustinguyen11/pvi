@@ -67,7 +67,7 @@ import { useMsal } from '@azure/msal-react';
                       icon='setting'
                       onClick={()=>{
                         dispatch(changeShowLeft(false))
-                        navigate("/index")
+                        navigate("/settings")
                     }}
                       />
                     <FooterActionItem
@@ -75,7 +75,7 @@ import { useMsal } from '@azure/msal-react';
                       icon='help'
                       onClick={()=>{
                         dispatch(changeShowLeft(false))
-                       
+                        window.open('https://chat.zalo.me', '_blank', 'noopener,noreferrer');
                     }}
                      />
                     <FooterActionItem

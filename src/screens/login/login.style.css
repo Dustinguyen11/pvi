@@ -248,4 +248,19 @@ a {
   .box-login {
     max-height: 400px;
     overflow-y: auto;
+    min-height: 110px;
+  }
+
+  .box-login  .account .account-wrap {
+    flex: 1
+  }
+
+  
+  .box-login  .account {
+    display: flex;
+  }
+
+  .box-login .account-remove {
+    padding-top: 10px;
+    font-weight: bold;
   }

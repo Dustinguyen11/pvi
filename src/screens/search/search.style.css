@@ -1,0 +1,31 @@
+.s-title {
+    color: white;
+    font-size: 20px;
+    padding: 10px;
+    text-align: center;
+}
+
+.s-input-container input {
+    width: 100%;
+    display: block;
+    padding: 0px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    flex: 1;
+    color: white;
+}
+.s-input-container  {
+    margin: 20px;
+    border: 1px solid var(--bubble-color-send);
+    padding: 5px 10px;
+    border-radius: 8px;
+    display: flex;
+}
+
+.s-input-action {
+    cursor: pointer;
+}
+.s-loading {
+  text-align: center;
+}

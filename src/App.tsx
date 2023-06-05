@@ -22,6 +22,7 @@ import SearchScreen from './screens/search/search.screen';
 
 import i18n from './i18n'; 
 import 'react-toastify/dist/ReactToastify.css';
+import SettingsScreen from './screens/settings/settings.screen';
 let persistor = persistStore(store)
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
               <Route  path='/' element={<DashboardScreen/>}/>   
               <Route  path='/index' element={<IndexScreen/>}/>   
               <Route  path='/search' element={<SearchScreen/>}/>   
+              <Route  path='/settings' element={<SettingsScreen/>}/>   
           </Route> 
           <Route path="/dash" element={ <DashboardScreen/>} />
           <Route path="/login" element={ <LoginScreen/>} />

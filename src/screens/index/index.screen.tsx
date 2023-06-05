@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import "../dashboard/dashboard.style.css"
 import "./index.style.css"
 
@@ -14,6 +14,7 @@ import EbookComponent from '@app/components/ebook/ebook.component';
 import { Route, Routes } from 'react-router-dom';
 import { AppTocModel } from '@app/network/model/toc.model';
 import { bookJumpTo } from '@app/redux/bookReducer';
+import { MessageDocuments } from '@app/network/model/message.model';
  
 const TocItem = ({label,href, subitems, onClick} : {label: string, href: string, subitems: Array<AppTocModel> | undefined | null, onClick: ((href: string)=>void)}) => {
     return    <div className="toc-item-container">
@@ -38,7 +39,8 @@ const Index = () => {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const isShowBook = useAppSelector((state)=>state.book.showBook)
-    const [bookName, setBookName] = useState("123")
+    const books = useAppSelector((state)=>state.book.books)
+    const [book, setBook] = useState<MessageDocuments | null>(null)
     const [tocs, setTocs] = useState<Array<AppTocModel>>()
 
     const setLocation = (href: string) => {
@@ -67,17 +69,30 @@ const Index = () => {
         )
       }
 
+
+      const changeBook = useCallback((book: MessageDocuments ) => {
+        setBook(book)
+      }, [setBook])
+
+      const renderListbook = useCallback((books: MessageDocuments[]) => {
+        return <ol className='index-box-list'>
+              {
+                books.map((m)=><li id={m.id} onClick={()=>changeBook(m)}>{m.title}</li>)
+              }
+        </ol>
+    }, [])
+
     return  <div className='dashboard-content'>
      <div>
         <div className='index-book-title'>
-            {bookName}
+            {book == null ? "Documents" : book?.title}
         </div>
        {
-        renderToc(tocs || [])
+       ( book == null) ? renderListbook(books) : renderToc(tocs || [])
        }
      </div>
      <div className={isShowBook ? "d-book show" : "d-book hide"}>
-     <EbookComponent onChangeTocs={(tocs)=>setTocs(tocs)}/>
+     <EbookComponent bookName={book?.title} bookURL={book?.url} onChangeTocs={(tocs)=>setTocs(tocs)}/>
      </div>
     </div>
 }
