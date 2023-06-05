@@ -1,13 +1,13 @@
 
 .dashboard-content {
-    display: flex;
+    display: inline-flex;;
     width: 100%;
     
    
 }
 
 .dashboard-content > div {
-    flex: 1;
+    flex: 1 1 0%;
 }
 
 .d-book {

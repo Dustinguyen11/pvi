@@ -6,7 +6,25 @@ import "./ebook.style.css"
 import { book, setRedentionBook } from "@app/redux/bookReducer"
 import { useAppDispatch, useAppSelector } from "@app/hooks"
 import { AppTocModel } from "@app/network/model/toc.model"
-
+const useWindowWide = () => {
+  const [width, setWidth] = useState(0)
+  
+  useEffect(() => {
+    function handleResize() {
+      setWidth(window.innerWidth)
+    }
+    
+    window.addEventListener("resize", handleResize)
+    
+    handleResize()
+    
+    return () => { 
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [setWidth])
+  
+  return width
+  }
 
 type Props = {
   bookName: string,
@@ -28,7 +46,7 @@ const EbookComponent = ({onChangeTocs, bookName, bookURL} :  Props
   const bookLocation = useAppSelector((state) => state.book.bookLocation)
   const bookRenditionRef = useAppSelector((state) => state.book.redentionBook)
   const [location, setLocation] = useState<string | number>(1)
-
+  const width = useWindowWide()
   const [renditionRef, setRetension] = useState<Rendition | null>(null)
   const renderRef = useRef<ReactReader>(null)
   const dispatch = useAppDispatch()
@@ -72,7 +90,10 @@ const EbookComponent = ({onChangeTocs, bookName, bookURL} :  Props
           { 
             flow: "scrolled",
             allowPopups: true,
-            manager: 'continuous', width: "100%", height: "100%"
+            manager: 'continuous',
+
+            width:  "100%"
+
           }
         }
         epubViewStyles={

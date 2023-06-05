@@ -50,7 +50,7 @@ export const book = createSlice({
       
        setTimeout(()=> {
         redenttion.display(action.payload)
-       }, 100)
+       }, 200)
         state.bookLocation = action.payload
       },
       setRedentionBook :  (state, action: PayloadAction<any>)=> {
