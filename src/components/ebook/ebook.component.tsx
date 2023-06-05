@@ -9,19 +9,22 @@ import { AppTocModel } from "@app/network/model/toc.model"
 
 
 type Props = {
- 
+  bookName: string,
+  bookURL: string | null | undefined,
   onChangeTocs: ((object: Array<AppTocModel>) => void) | null | undefined
- 
+  
 }
 
 
 const defaultProps: Props = {
-  onChangeTocs: undefined
+  onChangeTocs: undefined,
+  bookName: "",
+  bookURL: undefined,
 }
 
-const EbookComponent = ({onChangeTocs} :  Props
+const EbookComponent = ({onChangeTocs, bookName, bookURL} :  Props
 ) => {
-  const bookName = useAppSelector((state) => state.book.bookName)
+ // const bookName = useAppSelector((state) => state.book.bookName)
   const bookLocation = useAppSelector((state) => state.book.bookLocation)
   const bookRenditionRef = useAppSelector((state) => state.book.redentionBook)
   const [location, setLocation] = useState<string | number>(1)
@@ -66,8 +69,7 @@ const EbookComponent = ({onChangeTocs} :  Props
           openAs: 'epub'
         }}
         epubOptions={
-          {
-            
+          { 
             flow: "scrolled",
             allowPopups: true,
             manager: 'continuous', width: "100%", height: "100%"
@@ -76,7 +78,7 @@ const EbookComponent = ({onChangeTocs} :  Props
         epubViewStyles={
           customStyle
         }
-        url="https://react-reader.metabits.no/files/alice.epub"
+        url= {bookURL || ""}
         getRendition={rendition => {
           setRetension(rendition) 
           rendition.display()
@@ -85,10 +87,8 @@ const EbookComponent = ({onChangeTocs} :  Props
           rendition.themes.default({
             '::selection': {
               background: 'orange'
-            }
-
-          })
-
+            } 
+          }) 
         }}
       />
     </div>

@@ -15,7 +15,7 @@ import * as uuid from 'uuid'
 import { useTranslation } from 'react-i18next';
 import { cleanMessages, postAIMessage, revcAIMessage } from '@app/redux/chatReducer';
 import { AskDocument } from '@app/network/api/chatai.service';
-import { setBookName } from '@app/redux/bookReducer';
+import { setBook } from '@app/redux/bookReducer';
  
 type Props = { 
 }
@@ -27,6 +27,7 @@ type Props = {
     const userEmail = useAppSelector((state)=>state.authen.userEmail)
     const instanceId = useAppSelector((state)=>state.authen.instanceId)
     const isSending = useAppSelector((state)=>state.chat.isSending)
+    const testBooks = useAppSelector((state)=>state.book.books)
 
     const refInputBox = useRef<HTMLDivElement>(null);
     const [textChat, setTextChat] = useState("")
@@ -39,17 +40,7 @@ type Props = {
             id: uuid.v4(),
             text:  "Danh mục sách hỏi đáp:",
             referents: [],
-            documents: [
-                {
-                    title: "Quyển số 1",
-                    url: "https://react-reader.metabits.no/files/alice.epub",
-                    id:"1"
-                },
-                {
-                    title: "Quyển số 2",
-                    url: "https://react-reader.metabits.no/files/alice.epub",
-                    id:"2"
-                }],
+            documents: testBooks,
             senderId: "system"
         } ))  
         dispatch(revcAIMessage(    {
@@ -203,7 +194,7 @@ type Props = {
                     if (object as MessageDocuments)
                     { 
                             //sendMessage(object.title)
-                            dispatch(setBookName(object.title))
+                            dispatch(setBook(object))
                     }  
                 }
              }

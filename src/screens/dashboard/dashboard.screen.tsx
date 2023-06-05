@@ -16,10 +16,11 @@ const Dashboard = () => {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const isShowBook = useAppSelector((state)=>state.book.showBook)
+    const currentBook = useAppSelector((state) => state.book.currentBook)
     return  <div className='dashboard-content'>
     <ChatBox/>
      <div className={isShowBook ? "d-book show" : "d-book hide"}>
-     <EbookComponent/>
+     <EbookComponent bookName={currentBook?.title} bookURL={currentBook?.url}/>
      </div>
     </div>
 }

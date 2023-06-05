@@ -2,19 +2,32 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import { v4 as uuidv4 } from 'uuid';
 import {   Rendition } from 'epubjs'
-
+import { MessageDocuments } from "@app/network/model/message.model"
 
 type initialStateType = {
     showBook: boolean;
     redentionBook: any
-    bookName: string
-    bookLocation: string | number | null
+    currentBook: MessageDocuments | null,
+    bookLocation: string | number | null,
+    books:MessageDocuments[]
  };
  const initialState: initialStateType = {
     showBook: false,
     redentionBook: null,
-    bookName: "",
-    bookLocation: null
+    currentBook: null,
+    bookLocation: null,
+    books:[
+      {
+        title: "Quyển số 1",
+        url: "https://react-reader.metabits.no/files/alice.epub",
+        id:"1"
+    },
+    {
+        title: "Quyển số 2",
+        url: "https://react-reader.metabits.no/files/alice.epub",
+        id:"2"
+    }
+    ]
 };
 
 
@@ -44,11 +57,11 @@ export const book = createSlice({
         state.redentionBook = action.payload
         
       },
-      setBookName :  (state, action: PayloadAction<string>)=> {
-        state.bookName = action.payload
+      setBook :  (state, action: PayloadAction<MessageDocuments>)=> {
+        state.currentBook = action.payload
       }, 
     },
   });
-export const { changeShowBook, setRedentionBook ,  bookJumpTo, setBookName} = book.actions;
+export const { changeShowBook, setRedentionBook ,  bookJumpTo, setBook} = book.actions;
 export default book.reducer;
 
