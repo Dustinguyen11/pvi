@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import { v4 as uuidv4 } from 'uuid';
+import { UserHistoryDTO, UserInfomationDTO } from '@app/network/model/user.model';
 
 type LoginParams = {
   accessToken: string
@@ -12,14 +13,18 @@ type initialStateType = {
     userEmail: string
     instanceId: string
     accessToken: string
-    idToken: string
+    idToken: string |  null | undefined
+    userInfo: UserInfomationDTO | null | undefined
+    histories: UserHistoryDTO[] 
  };
  const initialState: initialStateType = {
     id:"me",
     userEmail: "",
-    instanceId: "da410606-6fcc-45ad-acbc-d3d6f26e93e7",
+    instanceId: "user6_13",
     accessToken: "",
     idToken: "",
+    userInfo: null,
+    histories: []
 };
 
 
@@ -34,14 +39,30 @@ export const authen = createSlice({
         state.userEmail = action.payload.email
         state.accessToken = action.payload.accessToken
         state.idToken = action.payload.idToken 
+        state.id =  action.payload.email
      },
      userLogout:(state, action: PayloadAction<null>) => { 
+      state.id =  ""
       state.userEmail = ""
       state.accessToken = ""
       state.idToken = ""
+      state.userInfo  = null
+     },
+     setUserInfo:(state, action: PayloadAction<UserInfomationDTO>) => { 
+      state.userInfo = action.payload
+     },
+     setUserHistory:(state, action: PayloadAction<UserHistoryDTO[]>) => { 
+      state.histories = action.payload
+      console.log(state.histories)
      }
     }
   });
-export const { changeText , updateLogin, userLogout} = authen.actions;
+export const {
+  changeText , 
+  updateLogin, 
+  userLogout,
+  setUserInfo,
+  setUserHistory
+} = authen.actions;
 export default authen.reducer;
 

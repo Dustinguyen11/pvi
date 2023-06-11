@@ -29,3 +29,4 @@ export type MessageDTOModel = {
     response: string
     response_time: string
 }
+

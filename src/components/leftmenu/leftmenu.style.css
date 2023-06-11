@@ -24,12 +24,16 @@
     color: white;
     display: flex;
     cursor: pointer;
+    margin-bottom: 10px;
     
 }
 
 .history-item-container:hover {
     color: aquamarine;
     border-color: aquamarine;
+}
+.history-item-container:hover svg {
+    color: aquamarine;
 }
 .history-item-container label {
     flex: 1;

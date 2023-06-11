@@ -2,7 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import { v4 as uuidv4 } from 'uuid';
 import { ChatSession, ChatSessionStatus, UpdateChatRequest } from '@app/types';
-import { MessageModel } from '@app/network/model/message.model';
+import { MessageDTOModel, MessageModel } from '@app/network/model/message.model';
+import { MapToAnswer, MapToQuestion, UserHistoryDTO } from '@app/network/model/user.model';
+import { send } from 'process';
 
 
 type initialStateType = {
@@ -10,7 +12,8 @@ type initialStateType = {
     sessions: ChatSession[];
     currentSession: ChatSession | null | undefined,
     messages: MessageModel[],
-    isSending: boolean
+    isSending: boolean,
+    readOnly: boolean
 };
  
  const initialState: initialStateType = {
@@ -19,6 +22,7 @@ type initialStateType = {
     currentSession: null,
     messages: Array<MessageModel>(),
     isSending: false,
+    readOnly: false
 };
 
 
@@ -26,6 +30,24 @@ export const chat = createSlice({
     name: 'chat',
     initialState,
     reducers: {
+      openBox : (state, action: PayloadAction<UserHistoryDTO>)=> {
+        let result:MessageModel[] = []
+        for (var k in action.payload.messages) {
+          let msg = action.payload.messages[k] 
+          let chatMsg  = MapToQuestion(msg, state.id) 
+          let chatMsg2 = MapToAnswer(msg, "ai")
+          result.push(chatMsg)
+          result.push(chatMsg2)
+        }
+        state.messages = result
+        state.readOnly = true
+      },
+      setReadOnly: (state, action: PayloadAction<boolean>)=> {
+        state.readOnly =  action.payload
+      },
+      setId: (state, action: PayloadAction<string>)=> {
+        state.id =  action.payload
+      },
       cleanMessages:(state, action: PayloadAction<undefined>) => {
         state.messages = []
       },
@@ -90,6 +112,15 @@ export const chat = createSlice({
      
     },
   });
-export const { newChat , updateChat, postAIMessage, revcAIMessage, cleanMessages} = chat.actions;
+export const { 
+  newChat , 
+  updateChat, 
+  postAIMessage, 
+  revcAIMessage, 
+  cleanMessages,
+  setReadOnly,
+  setId,
+  openBox
+} = chat.actions;
 export default chat.reducer;
 

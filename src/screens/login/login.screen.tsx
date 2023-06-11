@@ -8,9 +8,11 @@ import { useTranslation } from 'react-i18next';
 import { AccountInfo, InteractionRequiredAuthError, InteractionType, PublicClientApplication } from '@azure/msal-browser';
 import { toast } from 'react-toastify';
 import { translateCell } from '@app/i18n';
-import { updateLogin, userLogout } from '@app/redux/authenReducer';
+import { setUserHistory, setUserInfo, updateLogin, userLogout } from '@app/redux/authenReducer';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@app/hooks';
+import { GetUserData } from '@app/network/api/chatai.service';
+import { setId } from '@app/redux/chatReducer';
 
 
 export default () => {
@@ -80,8 +82,44 @@ export default () => {
         setLoading(false)
     }
 
-    const doLoginAccount = (account: AccountInfo) => {
+    const requestUserData = async (account: AccountInfo, accessToken: string) => {
 
+            try{
+           /*
+                    let info = await GetUserData({
+                        userAccount: account.username,
+                        userEmail: account.username,
+                        userName: account.name || "No Name",
+                        accessToken: accessToken
+                    })
+
+                    */ 
+                    let info = await GetUserData({
+                        userName: "doan tien quyet",
+                        userAccount: "quyetdt",
+                        userEmail: "quyetdt@vpi.pvn.vn",
+                        accessToken: ''
+                    })
+                    let histories = []
+                    for (var k in info.all_chat_history) {
+                        let item = info.all_chat_history[k] 
+                        histories.push(item)
+                    }
+                   dispatch(setUserInfo(info.user_information) )
+                   dispatch(setUserHistory(histories))
+                   dispatch(setId(info.user_information.user_email))
+                   
+                    console.log(info)
+            } catch(e) {
+                console.log(e)
+            }
+
+          
+           setLoading(false)
+           navigate("/")
+    }
+    const doLoginAccount = (account: AccountInfo) => {
+        setLoading(true)
         localStorage.removeItem("login")
         const didGetAccessToken = (account: AccountInfo, accessToken: string, idToken: string) => {
             dispatch(updateLogin(
@@ -93,8 +131,8 @@ export default () => {
             ))
             instance.setActiveAccount(account)
             global.lastActiveAccount = account.username
-            setLoading(false)
-            navigate("/")
+           console.log("requt info")
+            requestUserData(account, accessToken)
         }
 
         let accesstokenReq = {
@@ -124,9 +162,7 @@ export default () => {
     }
 
     useEffect(() => {
-        if (accounts.length <= 0) {
-            return
-        }
+       
 
         let lastLoginValue = localStorage.getItem("login")
 
@@ -172,11 +208,20 @@ export default () => {
                                             <div className='account-name'>{account.name}</div>
                                             <div className='account-email' >{account.username}</div>
                                         </div>
-                                        <div className='account-remove' onClick={() => {
-                                            removeAccount(account)
-                                        }}>
-                                            X
-                                        </div>
+                                        {
+                                            isLoading ? 
+                                            <div className='account-remove' onClick={() => {
+                                                removeAccount(account)
+                                            }}>
+                                                   <div data-uk-spinner="ratio: 0.6"/> 
+                                            </div>
+                                            :   <div className='account-remove' onClick={() => {
+                                                removeAccount(account)
+                                            }}>
+                                                X
+                                            </div>
+                                        }
+                                      
                                     </div>
                                 )}
                             </>

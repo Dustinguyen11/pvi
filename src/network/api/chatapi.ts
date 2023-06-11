@@ -1,7 +1,9 @@
 
 
 export enum ChatAIApiEndpoint { 
-    askDocument
+    askDocument,
+    getUserData,
+    sendQuestion
 }
 
 
@@ -18,12 +20,23 @@ export class ChatAI {
     }
 
     get base(): string {
-        return "https://api.berri.ai"
+        switch (this.endpoint) {
+            case ChatAIApiEndpoint.getUserData:
+            case ChatAIApiEndpoint.sendQuestion:
+                return "http://203.113.132.106:8017"
+            case ChatAIApiEndpoint.askDocument:
+                return "https://api.berri.ai"
+        }
+       
     }
     get path() : string {
         switch (this.endpoint) {
             case ChatAIApiEndpoint.askDocument:
                 return "/query"
+            case ChatAIApiEndpoint.getUserData:
+                return "/user/allchat"
+            case ChatAIApiEndpoint.sendQuestion:
+                return "/ebook/query"
         }
     }
 
@@ -42,6 +55,9 @@ export class ChatAI {
         switch (this.endpoint) {
             case ChatAIApiEndpoint.askDocument:
                 return "GET"
+            case ChatAIApiEndpoint.getUserData: 
+            case ChatAIApiEndpoint.sendQuestion:
+                return "POST" 
         }
     }
 

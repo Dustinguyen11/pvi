@@ -14,8 +14,9 @@ import { MessageModel, MessageDocuments, MessageReferent } from '@app/network/mo
 import * as uuid from 'uuid'
 import { useTranslation } from 'react-i18next';
 import { cleanMessages, postAIMessage, revcAIMessage } from '@app/redux/chatReducer';
-import { AskDocument } from '@app/network/api/chatai.service';
+import { AskDocument, SendQuestion } from '@app/network/api/chatai.service';
 import { setBook } from '@app/redux/bookReducer';
+import { MapToAnswer } from '@app/network/model/user.model';
  
 type Props = { 
 }
@@ -79,13 +80,13 @@ type Props = {
             senderId: userid
         } 
         dispatch(postAIMessage( fakeMesasge ))
-
-        AskDocument({
+        
+        SendQuestion({
             userEmail: userEmail,
-            instanceId: instanceId,
-            query: message
+            topic_id: "user6_13",
+            question: message
         }).then((response)=> {
-            let aiMessage: MessageModel = {
+           /* let aiMessage: MessageModel = {
                 id: uuid.v4(),
                 text: response.response,
                 referents: response.references?.map((m)=> {
@@ -99,7 +100,14 @@ type Props = {
                 }) || [],
                 documents: [ ],
                 senderId: "ai"
-            } 
+            } */
+            let aiMessage = MapToAnswer({
+                _id: uuid.v4(),
+                question_time: "",
+                question: "",
+                answer: response,
+                answer_time: ""
+            }, "ai");
             dispatch(revcAIMessage( aiMessage ))  
         }).catch((error)=> {
             dispatch(revcAIMessage( {

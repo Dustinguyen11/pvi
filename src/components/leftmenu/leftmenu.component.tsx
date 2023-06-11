@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAppDispatch } from "@app/hooks";
+import { useAppDispatch, useAppSelector } from "@app/hooks";
 
 import "./leftmenu.style.css"
 import HistoryItem from './history-item';
@@ -10,13 +10,14 @@ import { useNavigate } from 'react-router-dom';
 import { userLogout } from '@app/redux/authenReducer';
 import { changeShowLeft } from '@app/redux/layoutReducer';
 import { useMsal } from '@azure/msal-react';
+import { openBox } from '@app/redux/chatReducer';
 
  const DashboardLeftMenu = ()=> {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { instance } = useMsal();
-
+    const histories = useAppSelector((state)=>state.authen.histories) || []
     return <div className='left-content-wraper'>
             <div className="left-content-header">
             <div className="petro-logo">
@@ -37,7 +38,20 @@ import { useMsal } from '@azure/msal-react';
                         navigate("/")
                      }}
                      />
-                   
+                    {
+                        histories.map((m)=> {
+                            return   <HistoryItem
+                            key = {m.information._id}
+                            title={". "+m.information.title} 
+                            showRemove={true}
+                            onClick={()=>{
+                              dispatch( openBox(m))
+                              dispatch(changeShowLeft(false))
+                              navigate("/")
+                            }}
+                            />
+                        })
+                    }
             </div>
             <div className='left-content-footer'>
                     <FooterActionItem 
