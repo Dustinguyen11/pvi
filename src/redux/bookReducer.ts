@@ -21,12 +21,7 @@ type initialStateType = {
         title: "Quyển số 1",
         url: "https://react-reader.metabits.no/files/alice.epub",
         id:"1"
-    },
-    {
-        title: "Quyển số 2",
-        url: "https://react-reader.metabits.no/files/alice.epub",
-        id:"2"
-    }
+    } 
     ]
 };
 

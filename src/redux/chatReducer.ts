@@ -13,7 +13,8 @@ type initialStateType = {
     currentSession: ChatSession | null | undefined,
     messages: MessageModel[],
     isSending: boolean,
-    readOnly: boolean
+    readOnly: boolean,
+    currentTopic: string
 };
  
  const initialState: initialStateType = {
@@ -22,7 +23,8 @@ type initialStateType = {
     currentSession: null,
     messages: Array<MessageModel>(),
     isSending: false,
-    readOnly: false
+    readOnly: false,
+    currentTopic: ""
 };
 
 
@@ -30,7 +32,14 @@ export const chat = createSlice({
     name: 'chat',
     initialState,
     reducers: {
-      openBox : (state, action: PayloadAction<UserHistoryDTO>)=> {
+      openBox : (state, action: PayloadAction<UserHistoryDTO | null >)=> {
+
+        if (action.payload == null){
+          state.readOnly = false
+          state.currentTopic = "" 
+          return
+        }
+
         let result:MessageModel[] = []
         for (var k in action.payload.messages) {
           let msg = action.payload.messages[k] 
@@ -41,6 +50,10 @@ export const chat = createSlice({
         }
         state.messages = result
         state.readOnly = true
+        state.currentTopic = action.payload.information.topic_id
+      },
+      setTopic:(state, action: PayloadAction<string>) => {
+        state.currentTopic = action.payload
       },
       setReadOnly: (state, action: PayloadAction<boolean>)=> {
         state.readOnly =  action.payload
@@ -120,7 +133,8 @@ export const {
   cleanMessages,
   setReadOnly,
   setId,
-  openBox
+  openBox,
+  setTopic
 } = chat.actions;
 export default chat.reducer;
 

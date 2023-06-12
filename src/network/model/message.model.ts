@@ -18,6 +18,7 @@ export type MessageModel = {
     referents: MessageReferent[] | null | undefined
     documents: MessageDocuments[] | null | undefined
     senderId: string
+    isError: boolean
 }
 export type MessageReferentDTOModel = {
     source_text: string

@@ -54,7 +54,7 @@ export default () => {
             if (info == null) {
                 return
             }
-            console.log(info)
+            
             dispatch(updateLogin(
                 {
                     email: info.account?.username ?? "",
@@ -66,7 +66,7 @@ export default () => {
             navigate("/")
 
         } catch (e) {
-            console.log(e)
+             console.log(e)
             toast.error(translateCell("Cancel"), {
                 position: "top-left",
                 autoClose: 2000,
@@ -85,21 +85,14 @@ export default () => {
     const requestUserData = async (account: AccountInfo, accessToken: string) => {
 
             try{
-           /*
-                    let info = await GetUserData({
+    
+                   let info = await GetUserData({
                         userAccount: account.username,
                         userEmail: account.username,
                         userName: account.name || "No Name",
                         accessToken: accessToken
                     })
-
-                    */ 
-                    let info = await GetUserData({
-                        userName: "doan tien quyet",
-                        userAccount: "quyetdt",
-                        userEmail: "quyetdt@vpi.pvn.vn",
-                        accessToken: ''
-                    })
+         
                     let histories = []
                     for (var k in info.all_chat_history) {
                         let item = info.all_chat_history[k] 
@@ -108,10 +101,20 @@ export default () => {
                    dispatch(setUserInfo(info.user_information) )
                    dispatch(setUserHistory(histories))
                    dispatch(setId(info.user_information.user_email))
-                   
-                    console.log(info)
+                    
             } catch(e) {
                 console.log(e)
+
+                toast.error(e + "", {
+                    position: "top-left",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                });
             }
 
           
@@ -131,7 +134,7 @@ export default () => {
             ))
             instance.setActiveAccount(account)
             global.lastActiveAccount = account.username
-           console.log("requt info")
+      
             requestUserData(account, accessToken)
         }
 

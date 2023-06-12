@@ -72,7 +72,7 @@
 
     left: -10px;
     top: 50%;
-    margin-top: -20px;
+    margin-top: -15px;
 }
 
 .send .speech::after {
@@ -80,7 +80,7 @@
     border-right: 0;
     right: -10px;
     top: 50%;
-    margin-top: -20px;
+    margin-top: -15px;
 }
 
 .reply .speech{
@@ -379,3 +379,7 @@ button {
 
 
    
+
+.msg-error {
+  color: red;
+}

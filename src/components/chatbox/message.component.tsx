@@ -24,7 +24,8 @@ type Props = {
     showCoppy: boolean,
     onSelectObject: ((object: any) => void) | null | undefined
     displayMenuItem: ((object: any) => string),
-    custom: FunctionComponent | null | undefined
+    custom: FunctionComponent | null | undefined,
+    error: boolean
 }
 
 type PropsMenu = {
@@ -47,7 +48,8 @@ const defaultProps: Props = {
     displayMenuItem: (object: any): string => {
         return object;
     },
-    custom: undefined
+    custom: undefined,
+    error: false
 }
 
 const MessageMenu = ({ menu, displayMenuItem, onSelectObject }: PropsMenu) => {
@@ -118,7 +120,7 @@ const MessageReferents = ({ referents }: PropsReferent) => {
     </Tooltip.Root>
     </div>
 }
-const Message = ({ type, message, referents, menu,showCoppy , onSelectObject, displayMenuItem, custom }: Props) => {
+const Message = ({ error, type, message, referents, menu,showCoppy , onSelectObject, displayMenuItem, custom }: Props) => {
 
 
     const copyText = useCallback(()=>{ 
@@ -136,14 +138,14 @@ const Message = ({ type, message, referents, menu,showCoppy , onSelectObject, di
     },  [message]);
 
     const displayMessage = () => {
-        return   <div className='message-content'>
+        return   <div className={"message-content " + (error ? "msg-error": "")}>
                 {message}
                 {
                     menu != null ? <MessageMenu onSelectObject={onSelectObject} menu={menu} displayMenuItem={displayMenuItem} /> : null
                 }
                 
                 {
-                showCoppy ? <div className='message-copy' onClick={copyText}>
+                (showCoppy && !error) ? <div className='message-copy' onClick={copyText}>
                     <SVGIcon name='copy'/> 
                 </div> : null
                 } 

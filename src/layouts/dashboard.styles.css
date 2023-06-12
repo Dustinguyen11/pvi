@@ -12,7 +12,7 @@
     background-color: var(--primary-color);
     height: 100%;
     z-index: 3;
-    display: flex;
+    display: block;
 }
 
 .layout-container .layout-content {

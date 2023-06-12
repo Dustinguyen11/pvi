@@ -13,10 +13,11 @@ import { useCallback } from 'react';
 import { MessageModel, MessageDocuments, MessageReferent } from '@app/network/model/message.model';
 import * as uuid from 'uuid'
 import { useTranslation } from 'react-i18next';
-import { cleanMessages, postAIMessage, revcAIMessage } from '@app/redux/chatReducer';
-import { AskDocument, SendQuestion } from '@app/network/api/chatai.service';
+import { cleanMessages, postAIMessage, revcAIMessage, setId, setTopic } from '@app/redux/chatReducer';
+import { AskDocument, CreateNewChat, GetUserData, SendQuestion, UpdateChatTitle } from '@app/network/api/chatai.service';
 import { setBook } from '@app/redux/bookReducer';
 import { MapToAnswer } from '@app/network/model/user.model';
+import { setUserHistory, setUserInfo } from '@app/redux/authenReducer';
  
 type Props = { 
 }
@@ -26,9 +27,12 @@ type Props = {
     const dispatch = useAppDispatch()
     const userid = useAppSelector((state)=>state.authen.id)
     const userEmail = useAppSelector((state)=>state.authen.userEmail)
-    const instanceId = useAppSelector((state)=>state.authen.instanceId)
+    const topicId = useAppSelector((state)=>state.chat.currentTopic)
     const isSending = useAppSelector((state)=>state.chat.isSending)
     const testBooks = useAppSelector((state)=>state.book.books)
+    const userInfo = useAppSelector((state)=>state.authen.userInfo)
+    const accessToken = useAppSelector((state)=>state.authen.accessToken)
+    const currentBookSelected = useAppSelector((state)=>state.book.currentBook)
 
     const refInputBox = useRef<HTMLDivElement>(null);
     const [textChat, setTextChat] = useState("")
@@ -36,15 +40,8 @@ type Props = {
     const { t } = useTranslation();
 
     useEffect(()=> {
-        dispatch(cleanMessages())
-        dispatch(revcAIMessage( {
-            id: uuid.v4(),
-            text:  "Danh mục sách hỏi đáp:",
-            referents: [],
-            documents: testBooks,
-            senderId: "system"
-        } ))  
-        dispatch(revcAIMessage(    {
+      
+       /* dispatch(revcAIMessage(    {
             id: uuid.v4(),
             text:  "tIN NHẮN được trả lời tự động vào có thông tin liên quan đến tệp tài liệu đồng thời cho phép copy",
             referents: [
@@ -62,62 +59,121 @@ type Props = {
             documents: [ ],
             senderId: "system"
         }
-        ))
+        ))*/
+
+        if (topicId == "") {
+            dispatch(cleanMessages())
+            dispatch(revcAIMessage( {
+                id: uuid.v4(),
+                text:  "List of question books:",
+                referents: [],
+                documents: testBooks,
+                senderId: "system",
+                isError: false
+            } ))  
+        }
+        
     }, [])
 
-    const sendMessage = (message: string) => {
+    const updateUserBoxInfo = async () => {
+        let info = await GetUserData({
+            userName: userInfo?.user_name ?? "",
+            userAccount: userInfo?.user_account ?? "",
+            userEmail: userInfo?.user_email ?? "",
+            accessToken: accessToken
+        })
+        
+        let histories = []
+        for (var k in info.all_chat_history) {
+            let item = info.all_chat_history[k] 
+            histories.push(item)
+        }
+
+       dispatch(setUserInfo(info.user_information) )
+       dispatch(setUserHistory(histories))
+       //dispatch(setId(info.user_information.user_email))
+       return "update history success" 
+    }
+
+    const sendMessage = async (message: string) => {
         if (isSending) {
             return;
         }
-        
-        updateText("")
- 
+
+        if (currentBookSelected == null) {
+
+            var fakeMesasge: MessageModel = {
+                id: uuid.v4(),
+                text: "Please select a book",
+                referents: [],
+                documents: [],
+                senderId: "ai",
+                isError: true
+            } 
+            updateText("") 
+            dispatch(revcAIMessage( fakeMesasge ))
+            return
+        }
+        try { 
         var fakeMesasge: MessageModel = {
             id: uuid.v4(),
             text: message,
             referents: [],
             documents: [ ],
-            senderId: userid
+            senderId: userid,
+            isError: false
         } 
+        updateText("") 
         dispatch(postAIMessage( fakeMesasge ))
         
-        SendQuestion({
-            userEmail: userEmail,
-            topic_id: "user6_13",
-            question: message
-        }).then((response)=> {
-           /* let aiMessage: MessageModel = {
-                id: uuid.v4(),
-                text: response.response,
-                referents: response.references?.map((m)=> {
-                  var  referent: MessageReferent = {
-                        title: "#Page " + m.doc_metadata["page"],
-                        url: m.doc_metadata["source"],
-                        content: m.source_text
-                  }
+        var sendToTopic = topicId
+   
+        if (sendToTopic == ""){
+            let topicId = await CreateNewChat({
+                userEmail: userEmail
+            })  
+           try {
+                await UpdateChatTitle({
+                    topicId: topicId,
+                    newTitle: message
+                }); 
+           } catch(e) {}
+            dispatch(setTopic(topicId))
+            sendToTopic =  topicId
 
-                    return referent
-                }) || [],
-                documents: [ ],
-                senderId: "ai"
-            } */
-            let aiMessage = MapToAnswer({
-                _id: uuid.v4(),
-                question_time: "",
-                question: "",
-                answer: response,
-                answer_time: ""
-            }, "ai");
-            dispatch(revcAIMessage( aiMessage ))  
-        }).catch((error)=> {
+            updateUserBoxInfo().then(console.log)
+        }  
+
+        let response = await SendQuestion({
+            userEmail: userEmail,
+            topicId: sendToTopic,
+            question: message
+        })
+
+        
+        if (response.Error != null) {
+            throw response.Error
+        }
+
+        let aiMessage = MapToAnswer({
+            _id: uuid.v4(),
+            question_time: "",
+            question: "",
+            answer: response,
+            answer_time: ""
+        }, "ai");
+        dispatch(revcAIMessage( aiMessage ))  
+       
+    } catch(error) {
             dispatch(revcAIMessage( {
                 id: uuid.v4(),
                 text: error +"",
                 referents: [],
                 documents: [ ],
-                senderId: "ai"
+                senderId: "ai",
+                isError: true
             }  ))  
-        })
+        }
     }
 
     const onSubmit = () => {
@@ -161,6 +217,26 @@ type Props = {
         event.preventDefault();
  
     }
+
+    useEffect(()=>{
+       
+        if (userEmail == "") { 
+            return
+        }
+
+        if (topicId == "") {
+            dispatch(cleanMessages())
+            dispatch(revcAIMessage( {
+                id: uuid.v4(),
+                text:  "Danh mục sách hỏi đáp:",
+                referents: [],
+                documents: testBooks,
+                senderId: "system",
+                isError: false
+            } ))  
+        }
+        updateUserBoxInfo().then(console.log)
+    }, [userEmail, topicId])
     return <div className='chatbox-container'>  
         <div className='messages-wraper'>
             <div className='messages'>
@@ -197,6 +273,7 @@ type Props = {
              referents={value.referents || []}
              showCoppy={(value.documents == null || value.documents.length == 0) && value.senderId != userid}
              menu={value.documents}
+             error = {value.isError}
              onSelectObject={
                 (object)=>{
                     if (object as MessageDocuments)

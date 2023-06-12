@@ -31,7 +31,7 @@ export type HistoryAnserReferent = {
 export type ConversationMessageAnswerDTO = {
     answer: string
     source_documents: {[key: string]: HistoryAnserReferent}
- 
+    Error: string | null | undefined
 }
 
 export type ConversationMessageHistoryDTO = {
@@ -73,7 +73,8 @@ export const MapToQuestion = (msg: ConversationMessageHistoryDTO, sender: string
         text: msg.question,
         senderId: sender,
         referents: [],
-        documents: []
+        documents: [],
+        isError: false
       }
       return chatMsg
 }
@@ -84,7 +85,8 @@ export const MapToAnswer = (msg: ConversationMessageHistoryDTO, sender: string) 
         text: msg.answer.answer,
         senderId: "ai",
         referents: MapToReferent(msg.answer.source_documents),
-        documents: []
+        documents: [],
+        isError: false
       }
       return chatMsg
 }

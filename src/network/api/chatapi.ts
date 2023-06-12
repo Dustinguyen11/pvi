@@ -3,7 +3,10 @@
 export enum ChatAIApiEndpoint { 
     askDocument,
     getUserData,
-    sendQuestion
+    sendQuestion,
+    newChat,
+    updateChatTitle,
+    deleteChat
 }
 
 
@@ -23,6 +26,9 @@ export class ChatAI {
         switch (this.endpoint) {
             case ChatAIApiEndpoint.getUserData:
             case ChatAIApiEndpoint.sendQuestion:
+            case ChatAIApiEndpoint.updateChatTitle:
+            case ChatAIApiEndpoint.newChat:
+            case ChatAIApiEndpoint.deleteChat:
                 return "http://203.113.132.106:8017"
             case ChatAIApiEndpoint.askDocument:
                 return "https://api.berri.ai"
@@ -37,6 +43,12 @@ export class ChatAI {
                 return "/user/allchat"
             case ChatAIApiEndpoint.sendQuestion:
                 return "/ebook/query"
+            case ChatAIApiEndpoint.newChat:
+                return "/topic/new"
+            case ChatAIApiEndpoint.updateChatTitle:
+                return "/topic/updatetitle"
+            case ChatAIApiEndpoint.deleteChat:
+                return "/topic/delete"
         }
     }
 
@@ -53,11 +65,16 @@ export class ChatAI {
 
     get method(): string {
         switch (this.endpoint) {
+            case ChatAIApiEndpoint.updateChatTitle:
+                return "PUT"
             case ChatAIApiEndpoint.askDocument:
                 return "GET"
+            case ChatAIApiEndpoint.newChat:
             case ChatAIApiEndpoint.getUserData: 
             case ChatAIApiEndpoint.sendQuestion:
                 return "POST" 
+            case ChatAIApiEndpoint.deleteChat:
+                return "DELETE"
         }
     }
 
@@ -68,8 +85,7 @@ export class ChatAI {
             if (value == null) {
                 continue
             }
-            headers.append(key, value );
-
+            headers.append(key, value ); 
         }
         return headers
     }

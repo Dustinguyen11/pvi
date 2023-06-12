@@ -52,8 +52,8 @@ export const authen = createSlice({
       state.userInfo = action.payload
      },
      setUserHistory:(state, action: PayloadAction<UserHistoryDTO[]>) => { 
-      state.histories = action.payload
-      console.log(state.histories)
+      state.histories = action.payload.reverse()
+      //console.log(state.histories)
      }
     }
   });
